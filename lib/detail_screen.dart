@@ -1,6 +1,11 @@
+import 'package:codelab_1/model/tourism_place.dart';
 import 'package:flutter/material.dart';
 
 class DetailScreen extends StatelessWidget {
+  final TourismPlace place;
+
+  DetailScreen({@required this.place});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -8,13 +13,27 @@ class DetailScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Container(
-              child: Image.asset('images/farm-house.jpg'),
+            Stack(
+              children: [
+                Image.asset(place.imageAsset),
+                SafeArea(
+                  child: Row(
+                    children: [
+                      IconButton(
+                          icon: Icon(Icons.arrow_back),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          }),
+                      FavoriteButton(),
+                    ],
+                  ),
+                ),
+              ],
             ),
             Container(
                 margin: EdgeInsets.only(top: 36.0),
                 child: Text(
-                  'Farm House Lembang',
+                  place.name,
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 30.0, fontWeight: FontWeight.bold, fontFamily: 'Instagram'),
                 )),
@@ -29,7 +48,7 @@ class DetailScreen extends StatelessWidget {
                       SizedBox(
                         height: 8.0,
                       ),
-                      Text('Open Everyday')
+                      Text(place.location)
                     ],
                   ),
                   Column(
@@ -38,7 +57,7 @@ class DetailScreen extends StatelessWidget {
                       SizedBox(
                         height: 8.0,
                       ),
-                      Text('09:00 - 20:00')
+                      Text(place.openTime)
                     ],
                   ),
                   Column(
@@ -47,7 +66,7 @@ class DetailScreen extends StatelessWidget {
                       SizedBox(
                         height: 8.0,
                       ),
-                      Text('Rp. 25.000')
+                      Text(place.ticketPrice)
                     ],
                   )
                 ],
@@ -97,5 +116,27 @@ class DetailScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class FavoriteButton extends StatefulWidget {
+  @override
+  _FavoriteButtonState createState() => _FavoriteButtonState();
+}
+
+class _FavoriteButtonState extends State<FavoriteButton> {
+  bool isFavorite = false;
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+        icon: Icon(
+          isFavorite ? Icons.favorite : Icons.favorite_border,
+          color: Colors.red,
+        ),
+        onPressed: () {
+          setState(() {
+            isFavorite = !isFavorite;
+          });
+        });
   }
 }
